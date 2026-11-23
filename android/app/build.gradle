@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Adres serwera z gradle.properties (autoservis.serverUrl)
+def serverUrl = (project.findProperty('autoservis.serverUrl') ?: 'http://10.0.2.2:8080').toString()
+
+android {
+    namespace 'pl.autoserwis.pro'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'pl.autoserwis.pro'
+        minSdk 24 // Android 7.0 — pierwsze wydanie z Vulkanem
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DAUTOSERVIS_SERVER_URL=${serverUrl}"
+                // cppFlags "-std=c++17" // ustawione w CMakeLists (CMAKE_CXX_STANDARD)
+            }
+        }
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+            version '3.22.1'
+        }
+    }
+}

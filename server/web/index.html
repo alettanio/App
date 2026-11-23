@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoSerwis Pro — Zlecenia serwisowe</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">AS</div>
+    <div>
+      <div class="brand-name">AutoSerwis Pro</div>
+      <div class="brand-sub">Zlecenia serwisowe</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <span id="connBadge" class="badge badge-ok">Serwer: połączono</span>
+    <button id="btnNew" class="btn btn-primary">+ Nowe zlecenie</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="stats">
+      <div class="stat"><span class="stat-num" id="statTotal">0</span><span class="stat-label">Wszystkie</span></div>
+      <div class="stat"><span class="stat-num" id="statActive">0</span><span class="stat-label">Aktywne</span></div>
+      <div class="stat"><span class="stat-num" id="statRevenue">0 zł</span><span class="stat-label">Przychód (gotowe)</span></div>
+    </div>
+    <label class="field-label" for="search">Szukaj</label>
+    <input id="search" class="input" type="search" placeholder="Nr, klient, auto, tablica…">
+    <label class="field-label" for="statusFilter">Status</label>
+    <select id="statusFilter" class="input">
+      <option value="">Wszystkie statusy</option>
+      <option>Przyjęte</option>
+      <option>W realizacji</option>
+      <option>Oczekuje na części</option>
+      <option>Gotowe</option>
+      <option>Odebrane</option>
+      <option>Anulowane</option>
+    </select>
+    <label class="field-label" for="sortSel">Sortowanie</label>
+    <select id="sortSel" class="input">
+      <option value="dateDesc">Najnowsze przyjęcia</option>
+      <option value="dateAsc">Najstarsze przyjęcia</option>
+      <option value="dueAsc">Najbliższy termin</option>
+      <option value="amountDesc">Najwyższa kwota</option>
+    </select>
+    <p class="hint">Tworzenie i edycja zleceń dostępne tylko na komputerze-serwerze. Z telefonu możesz przeglądać listę i pobierać PDF.</p>
+  </aside>
+
+  <main class="content">
+    <div class="content-head">
+      <h1>Zlecenia</h1>
+      <span id="countLabel" class="count-label"></span>
+    </div>
+    <div id="ordersList" class="orders-list"></div>
+    <div id="emptyState" class="empty hidden">
+      <p>Brak zleceń spełniających kryteria.</p>
+      <button class="btn btn-primary" onclick="openEditor()">Utwórz pierwsze zlecenie</button>
+    </div>
+  </main>
+</div>
+
+<!-- Modal: edytor zlecenia -->
+<div id="editorModal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="editorTitle">Nowe zlecenie</h2>
+      <button class="icon-btn" onclick="closeEditor()">✕</button>
+    </div>
+    <form id="editorForm" class="form">
+      <input type="hidden" id="f_id">
+      <div class="form-grid">
+        <div>
+          <label class="field-label">Klient *</label>
+          <input id="f_clientName" class="input" required placeholder="Imię i nazwisko / firma">
+        </div>
+        <div>
+          <label class="field-label">Telefon</label>
+          <input id="f_clientPhone" class="input" placeholder="+48 600 000 000">
+        </div>
+        <div>
+          <label class="field-label">E-mail</label>
+          <input id="f_clientEmail" class="input" type="email" placeholder="klient@poczta.pl">
+        </div>
+        <div>
+          <label class="field-label">Adres</label>
+          <input id="f_clientAddress" class="input" placeholder="ul. …, miasto">
+        </div>
+        <div>
+          <label class="field-label">Marka *</label>
+          <input id="f_carBrand" class="input" required placeholder="np. Volkswagen">
+        </div>
+        <div>
+          <label class="field-label">Model *</label>
+          <input id="f_carModel" class="input" required placeholder="np. Golf VIII">
+        </div>
+        <div>
+          <label class="field-label">Rok</label>
+          <input id="f_carYear" class="input" placeholder="2021">
+        </div>
+        <div>
+          <label class="field-label">Silnik</label>
+          <input id="f_carEngine" class="input" placeholder="np. 2.0 TDI">
+        </div>
+        <div>
+          <label class="field-label">Nr rejestracyjny</label>
+          <input id="f_carPlate" class="input" placeholder="GD 12345">
+        </div>
+        <div>
+          <label class="field-label">VIN</label>
+          <input id="f_carVin" class="input" placeholder="WVW…">
+        </div>
+        <div>
+          <label class="field-label">Przebieg</label>
+          <input id="f_carMileage" class="input" placeholder="128 500 km">
+        </div>
+        <div>
+          <label class="field-label">Paliwo</label>
+          <select id="f_carFuel" class="input">
+            <option>Benzyna</option><option>Diesel</option><option>Hybryda</option><option>Elektryczny</option><option>LPG</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Data przyjęcia</label>
+          <input id="f_dateReceived" class="input" type="date">
+        </div>
+        <div>
+          <label class="field-label">Planowane oddanie</label>
+          <input id="f_dateDue" class="input" type="date">
+        </div>
+        <div>
+          <label class="field-label">Status</label>
+          <select id="f_status" class="input">
+            <option>Przyjęte</option><option>W realizacji</option><option>Oczekuje na części</option><option>Gotowe</option><option>Odebrane</option><option>Anulowane</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Priorytet</label>
+          <select id="f_priority" class="input">
+            <option>Niski</option><option selected>Normalny</option><option>Wysoki</option><option>Pilny</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Mechanik</label>
+          <input id="f_mechanic" class="input" placeholder="Osoba przyjmująca">
+        </div>
+        <div>
+          <label class="field-label">Gwarancja</label>
+          <input id="f_warranty" class="input" value="12 miesięcy na części i robociznę">
+        </div>
+        <div class="span2">
+          <label class="field-label">Zgłoszenie klienta (usterka)</label>
+          <textarea id="f_fault" class="input" rows="2" placeholder="Opis usterki zgłaszanej przez klienta…"></textarea>
+        </div>
+        <div class="span2">
+          <label class="field-label">Diagnoza serwisu</label>
+          <textarea id="f_diagnosis" class="input" rows="2" placeholder="Wynik diagnostyki…"></textarea>
+        </div>
+      </div>
+
+      <div class="repairs-head">
+        <h3>Naprawy / części</h3>
+        <button type="button" class="btn btn-ghost" onclick="addRepairRow()">+ Dodaj pozycję</button>
+      </div>
+      <div class="repairs-table-wrap">
+        <table class="repairs-table">
+          <thead><tr><th>Nazwa</th><th>Kod</th><th>Ilość</th><th>Netto [zł]</th><th>VAT %</th><th>Brutto</th><th></th></tr></thead>
+          <tbody id="repairsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label class="field-label">Rabat [%]</label>
+          <input id="f_discountPct" class="input" type="number" min="0" max="100" step="0.5" value="0">
+        </div>
+        <div>
+          <label class="field-label">Zaliczka [zł]</label>
+          <input id="f_advance" class="input" type="number" min="0" step="0.01" value="0">
+        </div>
+        <div class="span2">
+          <label class="field-label">Uwagi</label>
+          <textarea id="f_notes" class="input" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="totals-box" id="totalsBox"></div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeEditor()">Anuluj</button>
+        <button type="submit" class="btn btn-primary">Zapisz zlecenie</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: podgląd zlecenia -->
+<div id="detailModal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="detailTitle">Zlecenie</h2>
+      <button class="icon-btn" onclick="closeDetail()">✕</button>
+    </div>
+    <div id="detailBody" class="detail-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeDetail()">Zamknij</button>
+      <button class="btn btn-ghost" id="btnPrint">🖨 Drukuj</button>
+      <button class="btn btn-primary" id="btnPdf">⬇ Pobierz PDF</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

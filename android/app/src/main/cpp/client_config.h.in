@@ -1,0 +1,5 @@
+#pragma once
+// Generowany przez CMake z gradle.properties (autoservis.serverUrl).
+// Adres komputera-serwera w sieci LAN, np. http://192.168.1.20:8080
+// (10.0.2.2 to adres hosta dla emulatora Android).
+static const char kServerUrl[] = "@AUTOSERVIS_SERVER_URL@";

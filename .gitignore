@@ -1,0 +1,12 @@
+build/
+out/
+*.tmp
+data/orders.json
+data/orders.json.tmp
+zlecenia-pdf/
+android/.gradle/
+android/app/build/
+android/local.properties
+.idea/
+.vs/
+*.user

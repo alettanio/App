@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Vulkan dostępny od Android 7.0 (API 24); aplikacja wymaga GPU z Vulkanem -->
+    <uses-feature android:name="android.hardware.vulkan.level" android:version="4194304" android:required="false" />
+
+    <application
+        android:label="AutoSerwis Pro"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true">
+
+        <activity
+            android:name="android.app.NativeActivity"
+            android:label="AutoSerwis Pro — Zlecenia"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout">
+            <meta-data android:name="android.app.lib_name" android:value="autoservis-android" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
